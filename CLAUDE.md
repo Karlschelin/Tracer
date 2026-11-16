@@ -9,7 +9,7 @@ Primär användare: en golfare som filmar sina slag med iPhone på stativ, bakom
 - **All bearbetning sker lokalt i webbläsaren.** Videon laddas aldrig upp till någon server.
 - **Mobilen först.** Allt ska gå att göra med tummen på en iPhone. Desktop är andrahand.
 - **Gränssnittet är på svenska** och skrivs ur användarens perspektiv, till exempel "Markera träff här", inte "Set impact timestamp".
-- **Mät i stället för att gissa.** Ändringar i detektering och bananpassning ska verifieras mot klippen i `samples/` med siffror (se Test).
+- **Mät i stället för att gissa.** Ändringar i detektering och banpassning ska verifieras mot klippen i `samples/` med siffror (se Test).
 
 ## Nuvarande läge
 - `index.html` är en enda fil med inline CSS och JS, utan byggsteg (version 1, halvautomatisk).
