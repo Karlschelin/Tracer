@@ -6,14 +6,15 @@ Varje fas ska vara klar och testad innan nästa börjar. "Klart när" är accept
 - 5–10 korta klipp i `samples/`, gärna olika klubbor och ljus. Trimma dem i Bilder-appen till ca 3–6 s så att de blir små.
 - Facit-JSON per klipp. Fas 1 bygger ett annoteringsläge i appen som tar fram facit.
 
-## Fas 1 – Struktur och grund
+## Fas 1 – Struktur och grund (genomförd)
 - Flytta till Vite + TypeScript enligt målarkitekturen i CLAUDE.md. Beteendet ska vara oförändrat.
 - Frame-exakt stegning med `requestVideoFrameCallback` och automatisk fps-avläsning.
 - Annoteringsläge: klicka bollens position bild för bild och exportera som facit-JSON.
 - **Klart när:** alla befintliga funktioner fungerar, Playwright-testet passerar och facit finns för samples.
+- **Läge:** koden, testerna och facit-utkast finns. Utkasten är framtagna med bildanalys och ska granskas i annoteringsläget (status `utkast` → `granskad`) innan de används som facit i fas 2–3.
 
 ## Fas 2 – Automatisk träff
-- Hitta träffen via ljudtoppen (klickljudet) i ljudspåret, med bildskillnad runt bollen som reserv eller bekräftelse.
+- Hitta träffen via ljudtoppen (klickljudet) i ljudspåret, med bildskillnad runt bollen som reserv eller bekräftelse. I de två testklippen ligger ljudtoppen ungefär en bildruta efter träffen i bilden (se `samples/README.md`).
 - Hitta bollen vid uppställning: liten, ljus, rund fläck nära mattan i bilderna före träffen.
 - **Klart när:** träffen hittas inom ±2 bildrutor och bollen inom 10 px på alla samples.
 
