@@ -536,7 +536,20 @@ progress { width: 100%; accent-color: var(--accent); }
     video.addEventListener('seeked', on); video.currentTime = t;
   });
 
-  let lastUrl = null;
+  let lastUrl = null, lastBlob = null, lastName = 'golf-tracer.mp4';
+  // Inside a claude.ai artifact, files must be saved through the downloads capability.
+  let downloads = null;
+  if (window.claude && window.claude.use) {
+    window.claude.use('downloads').then((d) => { downloads = d; }).catch(() => {});
+  }
+  $('#dl').addEventListener('click', async (e) => {
+    if (!downloads || !lastBlob) return; // plain browser: the normal download link works
+    e.preventDefault();
+    try { await downloads.save({ filename: lastName, data: lastBlob }); }
+    catch (err) {
+      if (err && err.code !== 'declined') $('#fileInfo').textContent = 'Videon kunde inte sparas här (' + (err.code || 'fel') + ').';
+    }
+  });
   $('#btnExport').addEventListener('click', async () => {
     if (!window.MediaRecorder || !HTMLCanvasElement.prototype.captureStream) {
       $('#fileInfo').textContent = 'Den här webbläsaren kan inte spela in video. Prova senaste Safari eller Chrome.';
@@ -599,7 +612,8 @@ progress { width: 100%; accent-color: var(--accent); }
     if (lastUrl) URL.revokeObjectURL(lastUrl);
     lastUrl = URL.createObjectURL(blob);
     $('#outVideo').src = lastUrl;
-    const dl = $('#dl'); dl.href = lastUrl; dl.download = 'golf-tracer.' + (type.includes('mp4') ? 'mp4' : 'webm');
+    lastBlob = blob; lastName = 'golf-tracer.' + (type.includes('mp4') ? 'mp4' : 'webm');
+    const dl = $('#dl'); dl.href = lastUrl; dl.download = lastName;
     $('#result').hidden = false;
     updateUI();
   });
