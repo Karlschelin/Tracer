@@ -1,0 +1,680 @@
+{
+ "version": 1,
+ "clip": "IMG_8435.mov",
+ "width": 2160,
+ "height": 3840,
+ "fps": 30.0,
+ "frameCount": 235,
+ "status": "utkast",
+ "impactFrame": 35,
+ "ball": [
+  {
+   "frame": 15,
+   "x": 0.52591,
+   "y": 0.73828,
+   "source": "auto"
+  },
+  {
+   "frame": 16,
+   "x": 0.52591,
+   "y": 0.73828,
+   "source": "auto"
+  },
+  {
+   "frame": 17,
+   "x": 0.52595,
+   "y": 0.73841,
+   "source": "auto"
+  },
+  {
+   "frame": 18,
+   "x": 0.52593,
+   "y": 0.73851,
+   "source": "auto"
+  },
+  {
+   "frame": 19,
+   "x": 0.5258,
+   "y": 0.73864,
+   "source": "auto"
+  },
+  {
+   "frame": 20,
+   "x": 0.52579,
+   "y": 0.73878,
+   "source": "auto"
+  },
+  {
+   "frame": 21,
+   "x": 0.52573,
+   "y": 0.73889,
+   "source": "auto"
+  },
+  {
+   "frame": 22,
+   "x": 0.52575,
+   "y": 0.73898,
+   "source": "auto"
+  },
+  {
+   "frame": 23,
+   "x": 0.52564,
+   "y": 0.73921,
+   "source": "auto"
+  },
+  {
+   "frame": 24,
+   "x": 0.52577,
+   "y": 0.73925,
+   "source": "auto"
+  },
+  {
+   "frame": 25,
+   "x": 0.52584,
+   "y": 0.73944,
+   "source": "auto"
+  },
+  {
+   "frame": 26,
+   "x": 0.52583,
+   "y": 0.7396,
+   "source": "auto"
+  },
+  {
+   "frame": 27,
+   "x": 0.52565,
+   "y": 0.73978,
+   "source": "auto"
+  },
+  {
+   "frame": 28,
+   "x": 0.52572,
+   "y": 0.73999,
+   "source": "auto"
+  },
+  {
+   "frame": 29,
+   "x": 0.52564,
+   "y": 0.74015,
+   "source": "auto"
+  },
+  {
+   "frame": 30,
+   "x": 0.52559,
+   "y": 0.74031,
+   "source": "auto"
+  },
+  {
+   "frame": 31,
+   "x": 0.52554,
+   "y": 0.74057,
+   "source": "auto"
+  },
+  {
+   "frame": 32,
+   "x": 0.5256,
+   "y": 0.74078,
+   "source": "auto"
+  },
+  {
+   "frame": 33,
+   "x": 0.5258,
+   "y": 0.74091,
+   "source": "auto"
+  },
+  {
+   "frame": 34,
+   "x": 0.52576,
+   "y": 0.74112,
+   "source": "auto"
+  },
+  {
+   "frame": 35,
+   "x": 0.52576,
+   "y": 0.74112,
+   "source": "auto"
+  },
+  {
+   "frame": 36,
+   "x": 0.51884,
+   "y": 0.6756,
+   "source": "auto"
+  },
+  {
+   "frame": 37,
+   "x": 0.51083,
+   "y": 0.59948,
+   "source": "auto"
+  },
+  {
+   "frame": 38,
+   "x": 0.50458,
+   "y": 0.54299,
+   "source": "auto"
+  },
+  {
+   "frame": 39,
+   "x": 0.49954,
+   "y": 0.49922,
+   "source": "auto"
+  },
+  {
+   "frame": 40,
+   "x": 0.4956,
+   "y": 0.46414,
+   "source": "auto"
+  },
+  {
+   "frame": 41,
+   "x": 0.49218,
+   "y": 0.43549,
+   "source": "auto"
+  },
+  {
+   "frame": 42,
+   "x": 0.49009,
+   "y": 0.41185,
+   "source": "auto"
+  },
+  {
+   "frame": 43,
+   "x": 0.48727,
+   "y": 0.39198,
+   "source": "auto"
+  },
+  {
+   "frame": 44,
+   "x": 0.48537,
+   "y": 0.37469,
+   "source": "auto"
+  },
+  {
+   "frame": 45,
+   "x": 0.48361,
+   "y": 0.35953,
+   "source": "auto"
+  },
+  {
+   "frame": 46,
+   "x": 0.48218,
+   "y": 0.34628,
+   "source": "auto"
+  },
+  {
+   "frame": 47,
+   "x": 0.48093,
+   "y": 0.33464,
+   "source": "auto"
+  },
+  {
+   "frame": 48,
+   "x": 0.47958,
+   "y": 0.32435,
+   "source": "auto"
+  },
+  {
+   "frame": 49,
+   "x": 0.4787,
+   "y": 0.31513,
+   "source": "auto"
+  },
+  {
+   "frame": 50,
+   "x": 0.47773,
+   "y": 0.30693,
+   "source": "auto"
+  },
+  {
+   "frame": 51,
+   "x": 0.4769,
+   "y": 0.29943,
+   "source": "auto"
+  },
+  {
+   "frame": 52,
+   "x": 0.47606,
+   "y": 0.29281,
+   "source": "auto"
+  },
+  {
+   "frame": 53,
+   "x": 0.47546,
+   "y": 0.28693,
+   "source": "auto"
+  },
+  {
+   "frame": 54,
+   "x": 0.47463,
+   "y": 0.28148,
+   "source": "auto"
+  },
+  {
+   "frame": 55,
+   "x": 0.47407,
+   "y": 0.27674,
+   "source": "auto"
+  },
+  {
+   "frame": 56,
+   "x": 0.47338,
+   "y": 0.27211,
+   "source": "auto"
+  },
+  {
+   "frame": 57,
+   "x": 0.47296,
+   "y": 0.26815,
+   "source": "auto"
+  },
+  {
+   "frame": 58,
+   "x": 0.47236,
+   "y": 0.26448,
+   "source": "auto"
+  },
+  {
+   "frame": 59,
+   "x": 0.47199,
+   "y": 0.26117,
+   "source": "auto"
+  },
+  {
+   "frame": 60,
+   "x": 0.47153,
+   "y": 0.25818,
+   "source": "auto"
+  },
+  {
+   "frame": 61,
+   "x": 0.4712,
+   "y": 0.25544,
+   "source": "auto"
+  },
+  {
+   "frame": 62,
+   "x": 0.47074,
+   "y": 0.25302,
+   "source": "auto"
+  },
+  {
+   "frame": 63,
+   "x": 0.47037,
+   "y": 0.25078,
+   "source": "auto"
+  },
+  {
+   "frame": 64,
+   "x": 0.47005,
+   "y": 0.24885,
+   "source": "auto"
+  },
+  {
+   "frame": 65,
+   "x": 0.46991,
+   "y": 0.24701,
+   "source": "auto"
+  },
+  {
+   "frame": 66,
+   "x": 0.46949,
+   "y": 0.24539,
+   "source": "auto"
+  },
+  {
+   "frame": 67,
+   "x": 0.46917,
+   "y": 0.24396,
+   "source": "auto"
+  },
+  {
+   "frame": 68,
+   "x": 0.46889,
+   "y": 0.24271,
+   "source": "auto"
+  },
+  {
+   "frame": 69,
+   "x": 0.46866,
+   "y": 0.24161,
+   "source": "auto"
+  },
+  {
+   "frame": 70,
+   "x": 0.46847,
+   "y": 0.2406,
+   "source": "auto"
+  },
+  {
+   "frame": 71,
+   "x": 0.46833,
+   "y": 0.23979,
+   "source": "auto"
+  },
+  {
+   "frame": 72,
+   "x": 0.46796,
+   "y": 0.23909,
+   "source": "auto"
+  },
+  {
+   "frame": 73,
+   "x": 0.46764,
+   "y": 0.23865,
+   "source": "auto"
+  },
+  {
+   "frame": 74,
+   "x": 0.4675,
+   "y": 0.23826,
+   "source": "auto"
+  },
+  {
+   "frame": 75,
+   "x": 0.46731,
+   "y": 0.23789,
+   "source": "auto"
+  },
+  {
+   "frame": 76,
+   "x": 0.46731,
+   "y": 0.23766,
+   "source": "auto"
+  },
+  {
+   "frame": 77,
+   "x": 0.46699,
+   "y": 0.23771,
+   "source": "auto"
+  },
+  {
+   "frame": 78,
+   "x": 0.46681,
+   "y": 0.23768,
+   "source": "auto"
+  },
+  {
+   "frame": 79,
+   "x": 0.46657,
+   "y": 0.2376,
+   "source": "auto"
+  },
+  {
+   "frame": 80,
+   "x": 0.4663,
+   "y": 0.23781,
+   "source": "auto"
+  },
+  {
+   "frame": 81,
+   "x": 0.46588,
+   "y": 0.23805,
+   "source": "auto"
+  },
+  {
+   "frame": 82,
+   "x": 0.46583,
+   "y": 0.23836,
+   "source": "auto"
+  },
+  {
+   "frame": 83,
+   "x": 0.46556,
+   "y": 0.23859,
+   "source": "auto"
+  },
+  {
+   "frame": 84,
+   "x": 0.46514,
+   "y": 0.23914,
+   "source": "auto"
+  },
+  {
+   "frame": 85,
+   "x": 0.465,
+   "y": 0.23961,
+   "source": "auto"
+  },
+  {
+   "frame": 86,
+   "x": 0.46444,
+   "y": 0.24016,
+   "source": "auto"
+  },
+  {
+   "frame": 87,
+   "x": 0.46417,
+   "y": 0.24076,
+   "source": "auto"
+  },
+  {
+   "frame": 88,
+   "x": 0.46384,
+   "y": 0.24143,
+   "source": "auto"
+  },
+  {
+   "frame": 89,
+   "x": 0.46361,
+   "y": 0.24227,
+   "source": "auto"
+  },
+  {
+   "frame": 90,
+   "x": 0.46343,
+   "y": 0.24299,
+   "source": "auto"
+  },
+  {
+   "frame": 91,
+   "x": 0.4625,
+   "y": 0.24378,
+   "source": "auto"
+  },
+  {
+   "frame": 92,
+   "x": 0.46227,
+   "y": 0.24469,
+   "source": "auto"
+  },
+  {
+   "frame": 93,
+   "x": 0.46176,
+   "y": 0.24576,
+   "source": "auto"
+  },
+  {
+   "frame": 94,
+   "x": 0.46148,
+   "y": 0.24674,
+   "source": "auto"
+  },
+  {
+   "frame": 95,
+   "x": 0.46097,
+   "y": 0.24773,
+   "source": "auto"
+  },
+  {
+   "frame": 96,
+   "x": 0.46042,
+   "y": 0.2487,
+   "source": "auto"
+  },
+  {
+   "frame": 97,
+   "x": 0.46,
+   "y": 0.24984,
+   "source": "auto"
+  },
+  {
+   "frame": 98,
+   "x": 0.45954,
+   "y": 0.25107,
+   "source": "auto"
+  },
+  {
+   "frame": 99,
+   "x": 0.45912,
+   "y": 0.25227,
+   "source": "auto"
+  },
+  {
+   "frame": 100,
+   "x": 0.45852,
+   "y": 0.25354,
+   "source": "auto"
+  },
+  {
+   "frame": 101,
+   "x": 0.45787,
+   "y": 0.25505,
+   "source": "auto"
+  },
+  {
+   "frame": 102,
+   "x": 0.45736,
+   "y": 0.25612,
+   "source": "auto"
+  },
+  {
+   "frame": 103,
+   "x": 0.45704,
+   "y": 0.2574,
+   "source": "auto"
+  },
+  {
+   "frame": 104,
+   "x": 0.45653,
+   "y": 0.25898,
+   "source": "auto"
+  },
+  {
+   "frame": 105,
+   "x": 0.45616,
+   "y": 0.26049,
+   "source": "auto"
+  },
+  {
+   "frame": 106,
+   "x": 0.45556,
+   "y": 0.26195,
+   "source": "auto"
+  },
+  {
+   "frame": 107,
+   "x": 0.45495,
+   "y": 0.26349,
+   "source": "auto"
+  },
+  {
+   "frame": 108,
+   "x": 0.45431,
+   "y": 0.26516,
+   "source": "auto"
+  },
+  {
+   "frame": 109,
+   "x": 0.4537,
+   "y": 0.26693,
+   "source": "manuell"
+  },
+  {
+   "frame": 110,
+   "x": 0.45306,
+   "y": 0.26854,
+   "source": "manuell"
+  },
+  {
+   "frame": 111,
+   "x": 0.45259,
+   "y": 0.2701,
+   "source": "auto"
+  },
+  {
+   "frame": 114,
+   "x": 0.45102,
+   "y": 0.27565,
+   "source": "auto"
+  },
+  {
+   "frame": 115,
+   "x": 0.45037,
+   "y": 0.2776,
+   "source": "auto"
+  },
+  {
+   "frame": 116,
+   "x": 0.44981,
+   "y": 0.27961,
+   "source": "auto"
+  },
+  {
+   "frame": 117,
+   "x": 0.44921,
+   "y": 0.28159,
+   "source": "auto"
+  },
+  {
+   "frame": 118,
+   "x": 0.44731,
+   "y": 0.28333,
+   "source": "manuell"
+  },
+  {
+   "frame": 119,
+   "x": 0.44796,
+   "y": 0.28581,
+   "source": "auto"
+  },
+  {
+   "frame": 120,
+   "x": 0.44699,
+   "y": 0.28799,
+   "source": "auto"
+  },
+  {
+   "frame": 121,
+   "x": 0.44704,
+   "y": 0.29034,
+   "source": "auto"
+  },
+  {
+   "frame": 122,
+   "x": 0.44597,
+   "y": 0.29242,
+   "source": "auto"
+  },
+  {
+   "frame": 123,
+   "x": 0.44505,
+   "y": 0.29484,
+   "source": "auto"
+  },
+  {
+   "frame": 124,
+   "x": 0.44495,
+   "y": 0.29727,
+   "source": "auto"
+  },
+  {
+   "frame": 125,
+   "x": 0.44403,
+   "y": 0.29948,
+   "source": "auto"
+  },
+  {
+   "frame": 129,
+   "x": 0.44241,
+   "y": 0.30992,
+   "source": "auto"
+  },
+  {
+   "frame": 130,
+   "x": 0.44227,
+   "y": 0.31271,
+   "source": "auto"
+  }
+ ],
+ "landing": null,
+ "notes": "Utkast. Träffbild 35: klubban ligger mot bollen på viloplatsen, i bild 36 är bollen i luften. En vit peg står ca 85 px till höger om bollen och torvbitar flyger åt höger efter träffen. Bollen är delvis skymd av klubban vid uppställningen (bild 0-13) och helt i bild 14, så punkterna börjar i bild 15. Bild 15 och 35: punkten är kopierad från grannbilden. Kameran kryper långsamt (ca 0,6 px/bild nedåt vid bollen), därför är vilopunkterna mätta bild för bild. Flygningen följd t.o.m. bild 130 (toppen ca bild 78). Bild 109, 110 och 118 är satta för hand (svag fläck som spårningen missade). Bild 112-113, 126-128 och 131 och senare saknas: bollen syns inte mot molnen. Landningen syns inte."
+}

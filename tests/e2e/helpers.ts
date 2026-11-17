@@ -8,6 +8,8 @@ export const FACIT_OUT = join(import.meta.dirname, '../../.tmp/e2e-facit');
 export const CLIPS = [
   { name: 'IMG_0178.mov', width: 2160, height: 3840, fps: 30, frames: 205, duration: 6.833 },
   { name: 'IMG_0180.mov', width: 2160, height: 3840, fps: 30, frames: 121, duration: 4.033 },
+  { name: 'IMG_3297.mov', width: 2160, height: 3840, fps: 30, frames: 191, duration: 6.367 },
+  { name: 'IMG_8435.mov', width: 2160, height: 3840, fps: 30, frames: 235, duration: 7.833 },
 ] as const;
 
 /** Väljer ett klipp i filväljaren och väntar tills appen har läst av det. */

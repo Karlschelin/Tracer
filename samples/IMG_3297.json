@@ -1,0 +1,518 @@
+{
+ "version": 1,
+ "clip": "IMG_3297.mov",
+ "width": 2160,
+ "height": 3840,
+ "fps": 30.0,
+ "frameCount": 191,
+ "status": "utkast",
+ "impactFrame": 70,
+ "ball": [
+  {
+   "frame": 48,
+   "x": 0.33487,
+   "y": 0.73829,
+   "source": "auto"
+  },
+  {
+   "frame": 49,
+   "x": 0.33487,
+   "y": 0.73829,
+   "source": "auto"
+  },
+  {
+   "frame": 50,
+   "x": 0.33589,
+   "y": 0.73842,
+   "source": "auto"
+  },
+  {
+   "frame": 51,
+   "x": 0.33587,
+   "y": 0.73829,
+   "source": "auto"
+  },
+  {
+   "frame": 52,
+   "x": 0.33573,
+   "y": 0.73827,
+   "source": "auto"
+  },
+  {
+   "frame": 53,
+   "x": 0.33569,
+   "y": 0.73819,
+   "source": "auto"
+  },
+  {
+   "frame": 54,
+   "x": 0.33559,
+   "y": 0.73819,
+   "source": "auto"
+  },
+  {
+   "frame": 55,
+   "x": 0.33561,
+   "y": 0.73816,
+   "source": "auto"
+  },
+  {
+   "frame": 56,
+   "x": 0.33553,
+   "y": 0.73813,
+   "source": "auto"
+  },
+  {
+   "frame": 57,
+   "x": 0.33549,
+   "y": 0.73809,
+   "source": "auto"
+  },
+  {
+   "frame": 58,
+   "x": 0.33545,
+   "y": 0.73807,
+   "source": "auto"
+  },
+  {
+   "frame": 59,
+   "x": 0.33537,
+   "y": 0.73805,
+   "source": "auto"
+  },
+  {
+   "frame": 60,
+   "x": 0.33517,
+   "y": 0.73798,
+   "source": "auto"
+  },
+  {
+   "frame": 61,
+   "x": 0.33515,
+   "y": 0.73796,
+   "source": "auto"
+  },
+  {
+   "frame": 62,
+   "x": 0.33514,
+   "y": 0.73796,
+   "source": "auto"
+  },
+  {
+   "frame": 63,
+   "x": 0.33512,
+   "y": 0.73801,
+   "source": "auto"
+  },
+  {
+   "frame": 64,
+   "x": 0.33508,
+   "y": 0.73802,
+   "source": "auto"
+  },
+  {
+   "frame": 65,
+   "x": 0.33506,
+   "y": 0.73805,
+   "source": "auto"
+  },
+  {
+   "frame": 66,
+   "x": 0.3351,
+   "y": 0.7381,
+   "source": "auto"
+  },
+  {
+   "frame": 67,
+   "x": 0.33507,
+   "y": 0.73809,
+   "source": "auto"
+  },
+  {
+   "frame": 68,
+   "x": 0.33471,
+   "y": 0.73809,
+   "source": "auto"
+  },
+  {
+   "frame": 69,
+   "x": 0.33467,
+   "y": 0.73813,
+   "source": "auto"
+  },
+  {
+   "frame": 70,
+   "x": 0.33467,
+   "y": 0.73813,
+   "source": "auto"
+  },
+  {
+   "frame": 71,
+   "x": 0.36597,
+   "y": 0.69182,
+   "source": "auto"
+  },
+  {
+   "frame": 72,
+   "x": 0.39199,
+   "y": 0.65281,
+   "source": "auto"
+  },
+  {
+   "frame": 73,
+   "x": 0.41264,
+   "y": 0.62122,
+   "source": "auto"
+  },
+  {
+   "frame": 74,
+   "x": 0.42972,
+   "y": 0.59505,
+   "source": "auto"
+  },
+  {
+   "frame": 75,
+   "x": 0.44366,
+   "y": 0.57307,
+   "source": "auto"
+  },
+  {
+   "frame": 76,
+   "x": 0.4556,
+   "y": 0.55432,
+   "source": "auto"
+  },
+  {
+   "frame": 77,
+   "x": 0.46546,
+   "y": 0.53839,
+   "source": "auto"
+  },
+  {
+   "frame": 78,
+   "x": 0.47454,
+   "y": 0.52404,
+   "source": "auto"
+  },
+  {
+   "frame": 79,
+   "x": 0.48255,
+   "y": 0.51151,
+   "source": "auto"
+  },
+  {
+   "frame": 80,
+   "x": 0.48931,
+   "y": 0.50044,
+   "source": "auto"
+  },
+  {
+   "frame": 81,
+   "x": 0.49519,
+   "y": 0.49044,
+   "source": "auto"
+  },
+  {
+   "frame": 82,
+   "x": 0.50046,
+   "y": 0.48138,
+   "source": "auto"
+  },
+  {
+   "frame": 83,
+   "x": 0.50556,
+   "y": 0.47323,
+   "source": "auto"
+  },
+  {
+   "frame": 84,
+   "x": 0.50968,
+   "y": 0.46581,
+   "source": "auto"
+  },
+  {
+   "frame": 85,
+   "x": 0.51375,
+   "y": 0.45917,
+   "source": "auto"
+  },
+  {
+   "frame": 86,
+   "x": 0.51736,
+   "y": 0.45299,
+   "source": "auto"
+  },
+  {
+   "frame": 87,
+   "x": 0.52051,
+   "y": 0.4474,
+   "source": "auto"
+  },
+  {
+   "frame": 88,
+   "x": 0.5238,
+   "y": 0.44232,
+   "source": "auto"
+  },
+  {
+   "frame": 89,
+   "x": 0.52667,
+   "y": 0.4375,
+   "source": "auto"
+  },
+  {
+   "frame": 90,
+   "x": 0.52907,
+   "y": 0.43318,
+   "source": "auto"
+  },
+  {
+   "frame": 91,
+   "x": 0.5312,
+   "y": 0.42924,
+   "source": "auto"
+  },
+  {
+   "frame": 92,
+   "x": 0.53319,
+   "y": 0.42549,
+   "source": "auto"
+  },
+  {
+   "frame": 93,
+   "x": 0.53523,
+   "y": 0.42195,
+   "source": "auto"
+  },
+  {
+   "frame": 94,
+   "x": 0.53718,
+   "y": 0.41865,
+   "source": "auto"
+  },
+  {
+   "frame": 95,
+   "x": 0.53875,
+   "y": 0.41568,
+   "source": "auto"
+  },
+  {
+   "frame": 96,
+   "x": 0.54051,
+   "y": 0.41315,
+   "source": "auto"
+  },
+  {
+   "frame": 97,
+   "x": 0.54204,
+   "y": 0.41044,
+   "source": "auto"
+  },
+  {
+   "frame": 98,
+   "x": 0.54343,
+   "y": 0.40794,
+   "source": "auto"
+  },
+  {
+   "frame": 99,
+   "x": 0.54449,
+   "y": 0.40586,
+   "source": "auto"
+  },
+  {
+   "frame": 100,
+   "x": 0.54602,
+   "y": 0.4038,
+   "source": "auto"
+  },
+  {
+   "frame": 101,
+   "x": 0.54694,
+   "y": 0.40185,
+   "source": "auto"
+  },
+  {
+   "frame": 102,
+   "x": 0.5481,
+   "y": 0.40042,
+   "source": "auto"
+  },
+  {
+   "frame": 103,
+   "x": 0.54912,
+   "y": 0.39857,
+   "source": "auto"
+  },
+  {
+   "frame": 104,
+   "x": 0.54995,
+   "y": 0.39703,
+   "source": "auto"
+  },
+  {
+   "frame": 105,
+   "x": 0.55056,
+   "y": 0.39565,
+   "source": "auto"
+  },
+  {
+   "frame": 106,
+   "x": 0.55162,
+   "y": 0.39438,
+   "source": "auto"
+  },
+  {
+   "frame": 107,
+   "x": 0.55255,
+   "y": 0.39331,
+   "source": "auto"
+  },
+  {
+   "frame": 108,
+   "x": 0.55333,
+   "y": 0.39237,
+   "source": "auto"
+  },
+  {
+   "frame": 109,
+   "x": 0.55398,
+   "y": 0.3912,
+   "source": "auto"
+  },
+  {
+   "frame": 110,
+   "x": 0.55444,
+   "y": 0.39044,
+   "source": "auto"
+  },
+  {
+   "frame": 111,
+   "x": 0.55537,
+   "y": 0.38977,
+   "source": "auto"
+  },
+  {
+   "frame": 112,
+   "x": 0.5562,
+   "y": 0.38901,
+   "source": "auto"
+  },
+  {
+   "frame": 113,
+   "x": 0.55676,
+   "y": 0.38854,
+   "source": "auto"
+  },
+  {
+   "frame": 114,
+   "x": 0.55713,
+   "y": 0.38792,
+   "source": "auto"
+  },
+  {
+   "frame": 115,
+   "x": 0.55759,
+   "y": 0.38745,
+   "source": "auto"
+  },
+  {
+   "frame": 116,
+   "x": 0.55847,
+   "y": 0.38701,
+   "source": "auto"
+  },
+  {
+   "frame": 117,
+   "x": 0.55898,
+   "y": 0.38693,
+   "source": "auto"
+  },
+  {
+   "frame": 118,
+   "x": 0.55958,
+   "y": 0.38648,
+   "source": "auto"
+  },
+  {
+   "frame": 119,
+   "x": 0.56009,
+   "y": 0.38643,
+   "source": "auto"
+  },
+  {
+   "frame": 120,
+   "x": 0.5606,
+   "y": 0.38625,
+   "source": "auto"
+  },
+  {
+   "frame": 121,
+   "x": 0.56102,
+   "y": 0.38633,
+   "source": "auto"
+  },
+  {
+   "frame": 122,
+   "x": 0.56125,
+   "y": 0.38625,
+   "source": "auto"
+  },
+  {
+   "frame": 123,
+   "x": 0.56162,
+   "y": 0.38628,
+   "source": "auto"
+  },
+  {
+   "frame": 124,
+   "x": 0.56167,
+   "y": 0.38635,
+   "source": "auto"
+  },
+  {
+   "frame": 126,
+   "x": 0.56245,
+   "y": 0.38685,
+   "source": "auto"
+  },
+  {
+   "frame": 127,
+   "x": 0.56292,
+   "y": 0.38742,
+   "source": "auto"
+  },
+  {
+   "frame": 128,
+   "x": 0.56375,
+   "y": 0.38792,
+   "source": "auto"
+  },
+  {
+   "frame": 129,
+   "x": 0.56394,
+   "y": 0.3881,
+   "source": "auto"
+  },
+  {
+   "frame": 130,
+   "x": 0.56435,
+   "y": 0.38846,
+   "source": "auto"
+  },
+  {
+   "frame": 131,
+   "x": 0.56458,
+   "y": 0.38901,
+   "source": "auto"
+  },
+  {
+   "frame": 132,
+   "x": 0.56528,
+   "y": 0.38932,
+   "source": "auto"
+  }
+ ],
+ "landing": null,
+ "notes": "Utkast. Träffbild 70: klubban ligger mot bollen på viloplatsen, i bild 71 är bollen i luften. Bollen är dold bakom klubbhuvudet vid uppställningen t.o.m. bild 47 (den vita fläcken där är klubbladet). Bild 48 och 70: bollen syns intill klubban, punkten är kopierad från grannbilden. Flygningen följd t.o.m. bild 132 (toppen ca bild 120). Bild 125 och 133 har bara en mycket svag fläck och saknas. Efter bild 133 försvinner bollen mot mörkt moln och syns inte på väg ner. Landningen syns inte."
+}
