@@ -10,7 +10,8 @@
     "typecheck": "tsc --noEmit",
     "test": "vitest run",
     "e2e": "playwright test",
-    "facit": "python3 tools/draft_facit.py"
+    "facit": "python3 tools/draft_facit.py",
+    "measure:track": "vitest run tests/unit/samples.track.test.ts --silent=false"
   },
   "devDependencies": {
     "@playwright/test": "^1.63.0",

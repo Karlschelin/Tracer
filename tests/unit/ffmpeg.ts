@@ -46,3 +46,33 @@ export function ffmpegAudio(file: string, sampleRate = 48000): AudioTrack | null
     return { samples: new Float32Array(buf.buffer, buf.byteOffset, buf.length >> 2).slice(), sampleRate };
   } catch { return null; }
 }
+
+/**
+ * Som ffmpegSource, men grab() avkodar 30 bildrutor i följd per anrop till ffmpeg och sparar dem.
+ * Mycket snabbare när bilderna läses i ordning, som i bollspårningen.
+ */
+export function ffmpegSequentialSource(file: string, chunk = 30): FrameSource & { grabs: number } {
+  const base = ffmpegSource(file);
+  const cache = new Map<string, Frame>();
+  const src = {
+    ...base,
+    async grab(frame: number, maxSide: number) {
+      const key = `${maxSide}:${frame}`;
+      let f = cache.get(key);
+      if (!f) {
+        src.grabs++;
+        const k = Math.min(1, maxSide / Math.max(base.width, base.height));
+        const w = Math.round(base.width * k), h = Math.round(base.height * k);
+        const buf = execFileSync('ffmpeg', ['-v', 'error', '-ss', String(Math.max(0, (frame - 0.25) / base.fps)), '-i', file,
+          '-vf', `scale=${w}:${h}:flags=bilinear`, '-frames:v', String(chunk), '-f', 'rawvideo', '-pix_fmt', 'rgba', '-'], { maxBuffer: 1 << 30 });
+        for (const k2 of cache.keys()) if (Number(k2.split(':')[1]) < frame - chunk) cache.delete(k2);
+        const n = w * h * 4;
+        for (let i = 0; (i + 1) * n <= buf.length; i++) cache.set(`${maxSide}:${frame + i}`, { width: w, height: h, data: new Uint8Array(buf.subarray(i * n, (i + 1) * n)) });
+        f = cache.get(key);
+        if (!f) throw new Error(`ffmpeg gav ingen bild ${frame}`);
+      }
+      return f;
+    },
+  };
+  return src;
+}
