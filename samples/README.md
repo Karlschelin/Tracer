@@ -80,12 +80,12 @@ Mätt med `npx vitest run tests/unit/samples.detect.test.ts` (ffmpeg) och `npx p
 | IMG_0178.mov | bara bild | 51 | 0 bildrutor | 1,2 px | 18 s |
 | IMG_0180.mov | ljud + bild | 20 | 0 bildrutor | 2,0 px | 5,0 s |
 | IMG_0180.mov | bara bild | 20 | 0 bildrutor | 2,0 px | 12 s |
-| IMG_3297.mov | ljud + bild | 70 | 0 bildrutor | 1,8 px | – |
-| IMG_3297.mov | bara bild | 70 | 0 bildrutor | 2,4 px | – |
+| IMG_3297.mov | ljud + bild | 70 | 0 bildrutor | 1,8 px | 4,4 s |
+| IMG_3297.mov | bara bild | 70 | 0 bildrutor | 2,4 px | 23 s |
 | IMG_8435.mov | ljud + bild | 35 | 0 bildrutor | 2,4 px | 2,4 s |
 | IMG_8435.mov | bara bild | 35 | 0 bildrutor | 3,8–3,9 px | 19 s |
 
-**IMG_3297 rättat i fas 3, steg 0.** Bollen är liten (ca 2,6 px i analysbilden) men hittades redan av `findVanished`. Felet låg i bekräftelsen: i träffbilden (70) ligger klubban mot bollen och skymmer en del av den, så ljuset mitt på bollen ligger mellan "kvar" och "borta", och halveringen underkände kandidaten. Nu godtas en enda halvljus bild om bilden före är helt ljus eller bilden efter helt mörk. För att den regeln inte ska släppa igenom sådant som bara passerar förbi (i IMG_3297 en hand eller ett skaft vid bild 160) krävs också att platsen efteråt har samma ljus som omgivningen, inte blir tydligt mörkare. Bildsökningen prövar nu de åtta bästa kandidaterna i stället för fyra. Övriga klipp är oförändrade (samma träffbild och bollfel). Tiderna i Chromium för IMG_3297 är inte mätta om.
+**IMG_3297 rättat i fas 3, steg 0.** Bollen är liten (ca 2,6 px i analysbilden) men hittades redan av `findVanished`. Felet låg i bekräftelsen: i träffbilden (70) ligger klubban mot bollen och skymmer en del av den, så ljuset mitt på bollen ligger mellan "kvar" och "borta", och halveringen underkände kandidaten. Nu godtas en enda halvljus bild om bilden före är helt ljus eller bilden efter helt mörk. För att den regeln inte ska släppa igenom sådant som bara passerar förbi (i IMG_3297 en hand eller ett skaft vid bild 160) krävs också att platsen efteråt har samma ljus som omgivningen, inte blir tydligt mörkare. Bildsökningen prövar nu de åtta bästa kandidaterna i stället för fyra. Övriga klipp är oförändrade (samma träffbild och bollfel).
 
 Kravet i roadmappen är ±2 bildrutor och 10 px. Tiderna är från Chromium utan grafikkort (mjukvaruavkodning av 4K) och säger inget säkert om en iPhone.
 
@@ -110,7 +110,7 @@ Mätt med `npm run measure:track` (ffmpeg, `tests/unit/samples.track.test.ts`): 
 | IMG_3297.mov | **0,25 %** (9 px) | 0,8 % | 0,18 % (42) | 0,39 % (19) | 42 | 0,85 | 6,1 s |
 | IMG_8435.mov | **0,74 %** (28 px) | 2,0 % | 0,29 % (44) | 1,2 % (46) | 44 | 0,76 | 5,3 s |
 
-Alla fyra ligger under målet på 3 % och under roadmappens 1,5 %. Samma mätning i Chromium (`tests/e2e/track.spec.ts`) gav 0,24–1,50 % (se nedan). Avkodningen i webbläsaren skiljer sig något från ffmpeg, så spårpunkterna blir inte exakt desamma.
+Alla fyra ligger under målet på 3 % och under roadmappens 1,5 %. Samma mätning i Chromium (`tests/e2e/track.spec.ts`) gav IMG_0178 1,21 %, IMG_0180 1,01 %, IMG_3297 0,25 % och IMG_8435 1,93 % (vid en tidigare körning 1,50 %). Avkodningen i webbläsaren skiljer sig något från ffmpeg, så spårpunkterna blir inte exakt desamma.
 
 ### Hur det fungerar
 
