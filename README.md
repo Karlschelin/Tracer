@@ -7,7 +7,7 @@ All bearbetning sker i webbläsaren och videon laddas aldrig upp någonstans.
 ## Så används den
 
 1. Välj en video. Bildfrekvensen läses av automatiskt (du kan välja den själv om det behövs).
-2. Stega fram till träffögonblicket, tryck på **Markera träff här** och peka på bollen.
+2. Tryck på **Hitta träffen automatiskt**. Appen lyssnar efter klickljudet, hittar bollen i bilden och ställer sig på träffbilden. Blir det fel: stega fram till träffögonblicket, tryck på **Markera träff här** och peka på bollen.
 3. Spola till landningen, tryck på **Markera landning här** och peka ut var bollen landar. Du kan också skriva in tiden i luften för hand.
 4. Toppen placeras automatiskt. Du kan peka ut den själv eller dra i punkterna.
 5. Välj färg, tjocklek och glöd.
@@ -36,6 +36,8 @@ npm test           # enhetstester (Vitest)
 npm run e2e        # Playwright mot klippen i samples/
 npm run build      # dist/index.html (en enda fil) och dist/artifact.html
 ```
+
+`npm test` mäter också träffdetekteringen mot facit med ffmpeg (hoppas över om ffmpeg saknas), och `npm run e2e` gör samma mätning i webbläsaren. `?ljud=av` i adressen stänger av ljudanalysen, för att prova sökningen i enbart bilden.
 
 `E2E_FULL=1 npm run e2e` jämför dessutom varje bildruta i båda klippen mot ffmpeg (tar ett par minuter).
 

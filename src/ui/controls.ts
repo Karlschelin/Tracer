@@ -3,11 +3,15 @@ import { emptyFacit } from '../annotate/facit';
 import { fetchSampleFacit, listSampleClips } from '../annotate/io';
 import type { App } from '../app/context';
 import { COLORS, type AppState } from '../app/state';
+import { decodeAudio } from '../detect/decodeAudio';
+import { detectImpact } from '../detect/impact';
+import { createAnalysis } from '../detect/workerClient';
 import { canRecord, recordVideo } from '../export/recorder';
 import { saveViaArtifact, usesArtifactDownloads } from '../export/save';
 import { drawTrace } from '../render/tracer';
 import { frameAtTime } from '../video/fps';
 import { measureFps } from '../video/frameClock';
+import { videoFrameSource } from '../video/frameSource';
 import { $, fmtFps, fmtTime } from './dom';
 
 export function setupControls(app: App): void {
@@ -50,8 +54,8 @@ export function setupControls(app: App): void {
     clock.reset();
     store.clearHistory();
     store.set({
-      loaded: true, busy: true, vw: video.videoWidth || 9, vh: video.videoHeight || 16,
-      impact: null, start: null, apex: null, end: null, mode: null,
+      loaded: true, busy: true, busyText: 'Läser av bildfrekvensen…', vw: video.videoWidth || 9, vh: video.videoHeight || 16,
+      impact: null, impactSource: null, start: null, apex: null, end: null, mode: null,
       facit: null, facitDirty: false, landingMode: false, fpsMeasured: null,
     });
     $('#result').hidden = true;
@@ -143,7 +147,48 @@ export function setupControls(app: App): void {
   $('#btnImpact').addEventListener('click', () => {
     video.pause();
     // Träffen sätts till början av den visade bildrutan.
-    store.set({ impact: clock.frameTime, mode: 'start' }, { undo: true });
+    store.set({ impact: clock.frameTime, impactSource: 'manuell', mode: 'start' }, { undo: true });
+  });
+
+  // ---------- Automatisk träff ----------
+  // ?ljud=av i adressen stänger av ljudanalysen, för att kunna prova sökningen i enbart bilden.
+  const useAudio = new URLSearchParams(location.search).get('ljud') !== 'av';
+  const detectVal = $('#impactVal');
+  $('#btnAuto').addEventListener('click', async () => {
+    const before = clock.frame;
+    const token = loadToken;
+    video.pause();
+    store.set({ busy: true, busyText: 'Letar efter träffen…', mode: null });
+    const analysis = createAnalysis();
+    const t0 = performance.now();
+    let result = null;
+    try {
+      const audio = useAudio ? await decodeAudio(video) : null;
+      result = await detectImpact(videoFrameSource(video, clock), audio, {
+        analysis,
+        onProgress: (_f, text) => { if (store.state.busyText !== text) store.set({ busyText: text }); },
+      });
+    } catch (err) {
+      console.error(err);
+    } finally {
+      detectVal.dataset.worker = analysis.usesWorker ? 'ja' : 'nej';
+      analysis.dispose();
+    }
+    if (token !== loadToken) return; // en ny video har laddats under tiden
+    detectVal.dataset.ms = String(Math.round(performance.now() - t0));
+    if (!result) {
+      await clock.seekToFrame(before);
+      store.set({ busy: false });
+      detectVal.dataset.method = 'ingen';
+      app.setInfo('Hittade ingen träff automatiskt. Stega fram till träffen och markera den själv.');
+      return;
+    }
+    await clock.seekToFrame(result.impactFrame);
+    detectVal.dataset.frame = String(result.impactFrame);
+    detectVal.dataset.ballX = result.ballPx.x.toFixed(2);
+    detectVal.dataset.ballY = result.ballPx.y.toFixed(2);
+    detectVal.dataset.method = result.method;
+    store.set({ busy: false, impact: result.impactTime, impactSource: result.method, start: result.ball }, { undo: true });
   });
   $('#btnLand').addEventListener('click', () => {
     video.pause();
@@ -232,11 +277,13 @@ export function setupControls(app: App): void {
   // ---------- Knapparnas tillstånd ----------
   const fmtImpact = (s: AppState) => s.impact == null
     ? 'Inte satt'
-    : 'Träff vid ' + fmtTime(s.impact) + ' (bild ' + frameAtTime(s.impact, s.fps) + ')' + (s.start ? '' : ' · peka på bollen');
+    : 'Träff vid ' + fmtTime(s.impact) + ' (bild ' + frameAtTime(s.impact, s.fps) + ')' +
+      (s.impactSource === 'ljud+bild' ? ' · hittad med ljud och bild' : s.impactSource === 'bild' ? ' · hittad i bilden' : '') +
+      (s.start ? '' : ' · peka på bollen');
   function updateUI(s: AppState): void {
     const L = s.loaded && !s.busy, off = !L || s.exporting;
     const ready = L && s.impact != null && !!s.start && !!s.end;
-    for (const id of ['btnPlay', 'btnBack', 'btnFwd', 'scrub', 'btnImpact']) ($('#' + id) as HTMLButtonElement).disabled = off;
+    for (const id of ['btnPlay', 'btnBack', 'btnFwd', 'scrub', 'btnImpact', 'btnAuto']) ($('#' + id) as HTMLButtonElement).disabled = off;
     $<HTMLButtonElement>('#btnLand').disabled = off || s.impact == null;
     $<HTMLButtonElement>('#btnApex').disabled = off || !s.start || !s.end;
     $<HTMLButtonElement>('#btnApexAuto').disabled = !s.apex || s.exporting;

@@ -8,8 +8,12 @@ export const COLORS = ['#ff3b30', '#ffd60a', '#ffffff', '#30d158', '#0a84ff', '#
 
 export interface AppState {
   loaded: boolean;
-  /** Sant medan videon förbereds (bildfrekvensen mäts). */
+  /** Sant medan appen arbetar med videon (mäter bildfrekvensen eller letar efter träffen). */
   busy: boolean;
+  /** Vad appen gör just nu, visas över videon medan busy är sant. */
+  busyText: string;
+  /** Hur träffen sattes senast: automatiskt (och med vilken metod) eller för hand. */
+  impactSource: 'ljud+bild' | 'bild' | 'manuell' | null;
   clipName: string;
   vw: number;
   vh: number;
@@ -46,7 +50,7 @@ export interface AppState {
 }
 
 export const initialState: AppState = {
-  loaded: false, busy: false, clipName: '', vw: 9, vh: 16,
+  loaded: false, busy: false, busyText: '', impactSource: null, clipName: '', vw: 9, vh: 16,
   fps: 30, fpsAuto: true, fpsMeasured: null,
   impact: null, flight: 4, start: null, apex: null, end: null, apexFrac: 0.5,
   color: COLORS[0], width: 6, glow: true,
@@ -55,7 +59,7 @@ export const initialState: AppState = {
 };
 
 export const DOC_KEYS: ReadonlyArray<keyof AppState> = [
-  'impact', 'flight', 'start', 'apex', 'end', 'apexFrac', 'facit', 'facitDirty',
+  'impact', 'impactSource', 'flight', 'start', 'apex', 'end', 'apexFrac', 'facit', 'facitDirty',
 ];
 
 export type AppStore = Store<AppState>;

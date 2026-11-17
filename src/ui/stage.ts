@@ -54,7 +54,7 @@ export function setupStage(app: App, frameListeners: Array<(frame: number) => vo
     const show = (text: string, attn = false) => { hint.hidden = false; hint.textContent = text; hint.classList.toggle('attn', attn); };
     if (s.exporting) { show('Exporterar…'); return; }
     if (!s.loaded) { show('Exempel · ladda upp din video för att börja'); return; }
-    if (s.busy) { show('Läser av bildfrekvensen…'); return; }
+    if (s.busy) { show(s.busyText || 'Arbetar…'); return; }
     if (s.annotating) {
       // Ingen stående hint här: den skulle täcka himlen, där bollen oftast är.
       if (s.landingMode) show('Peka där bollen landar', true);

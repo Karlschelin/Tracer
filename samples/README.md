@@ -43,3 +43,24 @@ Facit ligger som `IMG_xxxx.json` bredvid klippet. De två filerna här är **utk
 ## Ljudet mot bilden
 
 Stegen mellan bollens första lägen visar var i bildintervallet träffen sker: ungefär 0,3 bildrutor efter bild 51 i IMG_0178 och 0,8 efter bild 20 i IMG_0180. Ljudtoppen kommer i båda klippen ungefär en bildruta (30–35 ms) senare än så. Det är en skattning från två klipp, men den pekar på att träffen i bilden ligger ungefär en bildruta före ljudtoppen.
+
+## Automatisk träff (fas 2), mätt mot utkasten
+
+| Klipp | Väg | Träffbild | Fel | Bollfel | Tid i Chromium |
+|---|---|---|---|---|---|
+| IMG_0178.mov | ljud + bild | 51 | 0 bildrutor | 1,2 px | 3,4 s |
+| IMG_0178.mov | bara bild | 51 | 0 bildrutor | 1,2 px | 14 s |
+| IMG_0180.mov | ljud + bild | 20 | 0 bildrutor | 2,0 px | 3,9 s |
+| IMG_0180.mov | bara bild | 20 | 0 bildrutor | 2,0 px | 9 s |
+
+Kravet i roadmappen är ±2 bildrutor och 10 px. Tiderna är från Chromium utan grafikkort (mjukvaruavkodning av 4K) och säger inget säkert om en iPhone.
+
+Det här är också provat, med samma resultat (fel 0 bildrutor, bollfel högst 2,5 px räknat i 4K):
+- klippen omkodade till 1080p och 720p,
+- en mörk och kontrastfattig variant,
+- klippen trimmade 0,5 s i början och med ljudet sänkt till 15 %,
+- en inlagd falsk ljudtopp som är starkare än träffen (den väljs bort eftersom ingen boll försvinner där).
+
+Den andra ljudtoppen i IMG_0178 (2,37 s) sammanfaller med att bagen gungar till. Den ger en svag kandidat i bilden men underkänns, eftersom fläcken bleknar över flera bilder i stället för att försvinna från en bild till nästa.
+
+Begränsningar som mätningen inte täcker: facit är utkast som bygger på samma slags bildanalys, båda klippen är från samma plats, dag, matta och kameravinkel, och varianterna ovan är gjorda av samma två klipp. Boll på peg eller i gräs, annan bollfärg, flera bollar nära varandra, skakig kamera och 60–240 bilder per sekund är inte provade på riktiga klipp.

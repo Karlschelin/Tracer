@@ -69,7 +69,14 @@ export class FrameClock {
         resolve(n);
       };
       if (hasFrameCallback(v)) {
-        v.requestVideoFrameCallback!((_now, meta) => { this.mediaTime = meta.mediaTime; finish(); });
+        // Vänta på just den begärda rutan. En bild från en tidigare sökning kan hinna visas först.
+        const onFrame = (_now: number, meta: RvfcMeta) => {
+          if (done) return;
+          this.mediaTime = meta.mediaTime;
+          if (Math.abs(meta.mediaTime - n / this.fps) < 0.5 / this.fps) finish();
+          else v.requestVideoFrameCallback!(onFrame);
+        };
+        v.requestVideoFrameCallback!(onFrame);
       }
       // Reserv om ingen ny bild presenteras (äldre webbläsare, eller samma bild som redan visas).
       v.addEventListener('seeked', () => setTimeout(finish, hasFrameCallback(v) ? 150 : 0), { once: true });
