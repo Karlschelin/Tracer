@@ -5,6 +5,7 @@ import type { App } from '../app/context';
 import { COLORS, type AppState } from '../app/state';
 import { decodeAudio } from '../detect/decodeAudio';
 import { detectImpact } from '../detect/impact';
+import { LOW_CONFIDENCE, trackBall } from '../detect/track';
 import { createAnalysis } from '../detect/workerClient';
 import { canRecord, recordVideo } from '../export/recorder';
 import { saveViaArtifact, usesArtifactDownloads } from '../export/save';
@@ -55,10 +56,11 @@ export function setupControls(app: App): void {
     store.clearHistory();
     store.set({
       loaded: true, busy: true, busyText: 'Läser av bildfrekvensen…', vw: video.videoWidth || 9, vh: video.videoHeight || 16,
-      impact: null, impactSource: null, start: null, apex: null, end: null, mode: null,
+      impact: null, impactSource: null, start: null, apex: null, end: null, mode: null, perspective: 0, trackSource: null,
       facit: null, facitDirty: false, landingMode: false, fpsMeasured: null,
     });
     $('#result').hidden = true;
+    $('#trackVal').hidden = true;
     app.layout();
 
     // Läs av bildfrekvensen från videons egna tidsstämplar.
@@ -190,6 +192,62 @@ export function setupControls(app: App): void {
     detectVal.dataset.method = result.method;
     store.set({ busy: false, impact: result.impactTime, impactSource: result.method, start: result.ball }, { undo: true });
   });
+  // ---------- Automatisk bollbana ----------
+  const trackVal = $('#trackVal');
+  const showTrack = (text: string, warn = false) => {
+    trackVal.hidden = false; trackVal.textContent = text; trackVal.classList.toggle('warn', warn);
+  };
+  $('#btnTrack').addEventListener('click', async () => {
+    const s0 = store.state;
+    if (s0.impact == null || !s0.start) return;
+    const before = clock.frame;
+    const token = loadToken;
+    video.pause();
+    store.set({ busy: true, busyText: 'Följer bollen…', mode: null });
+    const analysis = createAnalysis();
+    const t0 = performance.now();
+    // Träffen ligger mellan bildruta f (sista bilden med bollen kvar) och f+1. En automatisk träff har
+    // tiden inne i intervallet, en manuell i början av bilden där klubban träffar bollen.
+    const f = Math.floor(s0.impact * s0.fps + 1e-6);
+    let result = null;
+    try {
+      result = await trackBall(videoFrameSource(video, clock), f, s0.start, {
+        candidates: analysis.trackCandidates,
+        onProgress: (p) => {
+          const text = `Följer bollen… ${Math.round(p * 100)} %`;
+          if (store.state.busyText !== text) store.set({ busyText: text });
+        },
+      });
+    } catch (err) {
+      console.error(err);
+    } finally {
+      trackVal.dataset.worker = analysis.usesWorker ? 'ja' : 'nej';
+      analysis.dispose();
+    }
+    if (token !== loadToken) return;
+    trackVal.dataset.ms = String(Math.round(performance.now() - t0));
+    await clock.seekToFrame(before);
+    if (!result || result.confidence < 0.25) {
+      store.set({ busy: false });
+      trackVal.dataset.confidence = result ? result.confidence.toFixed(2) : '0';
+      showTrack('Hittade inte bollen säkert. Markera landning och topp själv (steg 3 och 4).', true);
+      return;
+    }
+    const sh = result.shot;
+    trackVal.dataset.confidence = result.confidence.toFixed(2);
+    trackVal.dataset.points = String(result.points.length);
+    trackVal.dataset.shot = JSON.stringify(sh);
+    store.set({
+      busy: false, impact: sh.impact, flight: sh.flight, start: sh.start, apex: sh.apex, end: sh.end,
+      apexFrac: sh.apexFrac, perspective: sh.perspective, trackSource: 'auto',
+    }, { undo: true });
+    if (result.confidence < LOW_CONFIDENCE) {
+      showTrack('Osäker bana: kontrollera linjen och flytta topp och landning för hand om den inte följer bollen.', true);
+    } else {
+      showTrack(`Bollen följd i ${result.points.length} bilder. Landningen är uppskattad. Justera topp och landning om det behövs.`);
+    }
+  });
+
   $('#btnLand').addEventListener('click', () => {
     video.pause();
     const s = store.state;
@@ -285,6 +343,7 @@ export function setupControls(app: App): void {
     const ready = L && s.impact != null && !!s.start && !!s.end;
     for (const id of ['btnPlay', 'btnBack', 'btnFwd', 'scrub', 'btnImpact', 'btnAuto']) ($('#' + id) as HTMLButtonElement).disabled = off;
     $<HTMLButtonElement>('#btnLand').disabled = off || s.impact == null;
+    $<HTMLButtonElement>('#btnTrack').disabled = off || s.impact == null || !s.start;
     $<HTMLButtonElement>('#btnApex').disabled = off || !s.start || !s.end;
     $<HTMLButtonElement>('#btnApexAuto').disabled = !s.apex || s.exporting;
     $<HTMLButtonElement>('#btnPreview').disabled = !ready || s.exporting;

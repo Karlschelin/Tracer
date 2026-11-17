@@ -50,7 +50,7 @@ const clamp = (v: number, lo: number, hi: number) => Math.min(hi, Math.max(lo, v
 
 /**
  * Minsta kvadrat-passning med Huber-förlust. Startpunkten ligger fast. Landningen syns sällan, så den
- * hålls på plats av svaga antaganden: toppen nås ungefär halvvägs in i flygtiden och bollen landar
+ * hålls på plats av svaga antaganden: toppen nås efter ungefär 40 % av flygtiden och bollen landar
  * strax under horisonten, som antas ligga ungefär mitt i bilden.
  */
 export function fitShot(start: Point, obs: Obs[], opts: FitOptions): FittedShot | null {
@@ -75,8 +75,9 @@ export function fitShot(start: Point, obs: Obs[], opts: FitOptions): FittedShot 
       const r = shotError(s, o, aspect) / delta;
       sum += r <= 1 ? r * r : 2 * r - 1;
     }
-    // Svaga antaganden om det som inte syns.
-    sum += sq((s.apexFrac - 0.5) / 0.06);
+    // Svaga antaganden om det som inte syns. Toppen vid 40 % av flygtiden är vald efter samples/ (35–50 %
+    // när modellen passas mot hela facit) och gav minst fel när en tidig bild saknas.
+    sum += sq((s.apexFrac - 0.4) / 0.06);
     sum += sq((s.end.y - (horizon + (start.y - horizon) / (1 + s.perspective))) / 0.05);
     sum += sq((s.end.x - s.apex.x) / 0.15);
     // Ett golfslag flyger några sekunder. Utan antagandet kan flygtiden växa obegränsat när toppen inte syns.

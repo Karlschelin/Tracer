@@ -118,3 +118,4 @@ body.annot .trace-only { display: none; }
 .msg-ok { color: var(--ok); }
 .msg-err { color: var(--accent); }
 .val { line-height: 1.35; }
+.val.warn { color: var(--accent); }

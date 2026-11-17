@@ -1,8 +1,8 @@
 // Automatisk bollspårning: kopplar ihop kandidater till en bana och passar banmodellen till den.
 // Inga DOM-beroenden.
-import { fitErrors, fitShot, shotAt, type FittedShot, type Obs } from '../trajectory/fit';
+import { fitErrors, fitShot, shotAt, shotError, type FittedShot, type Obs } from '../trajectory/fit';
 import type { Point } from '../trajectory/model';
-import { frameCandidates, toGray, type Candidate, type Gray } from './candidates';
+import { GAPS, frameCandidates, toGray, type Candidate, type Gray } from './candidates';
 import type { FrameSource } from './types';
 
 export interface TrackPoint {
@@ -23,6 +23,8 @@ export interface TrackResult {
 }
 
 export const LOW_CONFIDENCE = 0.5;
+/** En spårpunkt räknas som en del av banan inom det här avståndet (andel av bildhöjden). */
+const INLIER = 0.015;
 
 type Cands = (frame: number) => Candidate[];
 
@@ -33,27 +35,43 @@ type Cands = (frame: number) => Candidate[];
  * (samma tanke som RANSAC: pröva många små urval och räkna hur många punkter som stämmer).
  */
 export function linkTrack(start: Point, impactFrame: number, lastFrame: number, cands: Cands, aspect: number): TrackPoint[] {
+  return linkTracks(start, impactFrame, lastFrame, cands, aspect)[0] ?? [];
+}
+
+/** Alla spår som hittas, längst först. Spår som till största delen är samma som ett längre tas bort. */
+export function linkTracks(start: Point, impactFrame: number, lastFrame: number, cands: Cands, aspect: number): TrackPoint[][] {
   const dist = (a: Point, b: Point) => Math.hypot((a.x - b.x) * aspect, a.y - b.y);
-  let best: TrackPoint[] = [];
-  let bestScore = 0;
-  for (const f1 of [impactFrame + 1, impactFrame + 2]) {
+  const all: TrackPoint[][] = [];
+  // Starten får ligga upp till tre bilder efter träffen och hoppa över en bild, så att en enstaka bild
+  // utan kandidat (bollen bakom klubban, en avkodad bild som inte blev rätt) inte stoppar spårningen.
+  for (const f1 of [impactFrame + 1, impactFrame + 2, impactFrame + 3]) {
     const dt = f1 - impactFrame;
     for (const c1 of cands(f1)) {
       const d1 = dist(start, c1);
       // Bollen går uppåt i bilden och hinner inte längre än en fjärdedel av bildhöjden per bildruta.
       if (c1.y > start.y - 0.004 || d1 < 0.008 || d1 > 0.25 * dt) continue;
       const v1 = { x: ((c1.x - start.x) * aspect) / dt, y: (c1.y - start.y) / dt }, n1 = d1 / dt;
-      for (const c2 of cands(f1 + 1)) {
-        const v2 = { x: (c2.x - c1.x) * aspect, y: c2.y - c1.y }, n2 = Math.hypot(v2.x, v2.y);
-        if (n2 < Math.max(0.008, 0.45 * n1) || n2 > 6 * n1) continue;
-        if ((v1.x * v2.x + v1.y * v2.y) / (n1 * n2) < 0.9) continue;
-        const track = extend([{ frame: f1, ...pick(c1) }, { frame: f1 + 1, ...pick(c2) }], lastFrame, cands, aspect);
-        const score = track.length;
-        if (score > bestScore) { best = track; bestScore = score; }
+      for (const f2 of [f1 + 1, f1 + 2]) {
+        const dt2 = f2 - f1;
+        for (const c2 of cands(f2)) {
+          const v2 = { x: ((c2.x - c1.x) * aspect) / dt2, y: (c2.y - c1.y) / dt2 }, n2 = Math.hypot(v2.x, v2.y);
+          if (n2 < Math.max(0.008, 0.3 * n1) || n2 > 6 * n1) continue;
+          if ((v1.x * v2.x + v1.y * v2.y) / (n1 * n2) < 0.9) continue;
+          const track = extend([{ frame: f1, ...pick(c1) }, { frame: f2, ...pick(c2) }], lastFrame, cands, aspect);
+          all.push(track);
+        }
       }
     }
   }
-  return best;
+  all.sort((p, q) => q.length - p.length);
+  const out: TrackPoint[][] = [];
+  const key = (p: TrackPoint) => `${p.frame}:${p.x}:${p.y}`;
+  for (const t of all) {
+    const keys = new Set(t.map(key));
+    if (out.some((o) => o.filter((p) => keys.has(key(p))).length > 0.5 * t.length)) continue;
+    out.push(t);
+  }
+  return out;
 }
 
 const pick = (c: Candidate) => ({ x: c.x, y: c.y, strength: c.strength });
@@ -124,11 +142,20 @@ export interface TrackInput {
 /** Från kandidater till färdig bana: spår, passning, och en omgång där modellen plockar upp fler punkter. */
 export function solveTrack(input: TrackInput, cands: Cands): TrackResult | null {
   const { start, impactFrame, lastFrame, fps, aspect } = input;
-  let points = linkTrack(start, impactFrame, lastFrame, cands, aspect);
-  if (points.length < 6) return null;
   const obsOf = (pts: TrackPoint[]): Obs[] => pts.map((p) => ({ t: (p.frame + 0.5) / fps, x: p.x, y: p.y }));
   const impactRange: [number, number] = [impactFrame / fps, (impactFrame + 1) / fps - 0.001];
-  let shot = fitShot(start, obsOf(points), { aspect, impactRange });
+  // Passa banmodellen till de längsta spåren och välj det som modellen förklarar bäst: flest punkter
+  // nära banan. Sådant som inte är en boll (klubban i genomsvingen, en fågel) följer inte en golfbana
+  // från bollens viloplats och får få punkter nära.
+  let points: TrackPoint[] = [], shot: FittedShot | null = null, bestScore = 0;
+  for (const t of linkTracks(start, impactFrame, lastFrame, cands, aspect).slice(0, 4)) {
+    if (t.length < 6) break;
+    const s = fitShot(start, obsOf(t), { aspect, impactRange });
+    if (!s) continue;
+    let score = 0;
+    for (const o of obsOf(t)) score += Math.max(0, 1 - shotError(s, o, aspect) / INLIER);
+    if (score > bestScore) { bestScore = score; points = t; shot = s; }
+  }
   if (!shot) return null;
   // Låt den passade banan plocka upp punkter som spåret missade, och bollen efter att den varit borta en stund.
   for (let round = 0; round < 2; round++) {
@@ -174,7 +201,7 @@ export async function trackBall(source: FrameSource, impactFrame: number, start:
   const find = opts.candidates ?? (async (w, n) => frameCandidates((k) => w.get(k), n));
   const window = new Map<number, Gray>();
   const found = new Map<number, Candidate[]>();
-  const REACH = 3; // största bildavståndet som jämförs
+  const REACH = Math.max(...GAPS); // största bildavståndet som jämförs
   for (let n = first; n <= lastFrame + REACH; n++) {
     if (n <= lastFrame) window.set(n, toGray(await source.grab(n, side)));
     const m = n - REACH; // bildruta som nu har alla sina grannar

@@ -16,6 +16,8 @@ export interface Shot {
   end: Point | null;
   apex: Point | null;
   apexFrac: number;
+  /** Perspektiv från den automatiska banan (0 = ingen). Se warp() i trajectory/model.ts. */
+  perspective?: number;
 }
 
 export type Ctx = CanvasRenderingContext2D | OffscreenCanvasRenderingContext2D;
@@ -28,7 +30,7 @@ export function mix(hex: string, hex2: string, k: number): string {
 
 export function trajectoryOf(shot: Shot): Trajectory | null {
   if (!shot.start || !shot.end) return null;
-  return { start: shot.start, end: shot.end, apex: shot.apex, apexFrac: shot.apexFrac };
+  return { start: shot.start, end: shot.end, apex: shot.apex, apexFrac: shot.apexFrac, perspective: shot.perspective ?? 0 };
 }
 
 /** Lägger banan från u=0 till u=u1 som en path i ctx. */

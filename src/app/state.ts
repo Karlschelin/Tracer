@@ -30,6 +30,10 @@ export interface AppState {
   apex: Point | null;
   end: Point | null;
   apexFrac: number;
+  /** Perspektiv i banmodellen. Sätts av den automatiska bollbanan, annars 0. */
+  perspective: number;
+  /** Hur start, topp och landning sattes senast: automatiskt eller för hand. */
+  trackSource: 'auto' | null;
 
   // Utseende
   color: string;
@@ -52,14 +56,14 @@ export interface AppState {
 export const initialState: AppState = {
   loaded: false, busy: false, busyText: '', impactSource: null, clipName: '', vw: 9, vh: 16,
   fps: 30, fpsAuto: true, fpsMeasured: null,
-  impact: null, flight: 4, start: null, apex: null, end: null, apexFrac: 0.5,
+  impact: null, flight: 4, start: null, apex: null, end: null, apexFrac: 0.5, perspective: 0, trackSource: null,
   color: COLORS[0], width: 6, glow: true,
   mode: null, exporting: false,
   annotating: false, landingMode: false, autoAdvance: true, facit: null, facitDirty: false,
 };
 
 export const DOC_KEYS: ReadonlyArray<keyof AppState> = [
-  'impact', 'impactSource', 'flight', 'start', 'apex', 'end', 'apexFrac', 'facit', 'facitDirty',
+  'impact', 'impactSource', 'flight', 'start', 'apex', 'end', 'apexFrac', 'perspective', 'trackSource', 'facit', 'facitDirty',
 ];
 
 export type AppStore = Store<AppState>;
