@@ -80,12 +80,12 @@ Mätt med `npx vitest run tests/unit/samples.detect.test.ts` (ffmpeg) och `npx p
 | IMG_0178.mov | bara bild | 51 | 0 bildrutor | 1,2 px | 18 s |
 | IMG_0180.mov | ljud + bild | 20 | 0 bildrutor | 2,0 px | 5,0 s |
 | IMG_0180.mov | bara bild | 20 | 0 bildrutor | 2,0 px | 12 s |
-| IMG_3297.mov | ljud + bild | **hittas inte** | – | – | 26 s |
-| IMG_3297.mov | bara bild | **hittas inte** | – | – | 21 s |
+| IMG_3297.mov | ljud + bild | 70 | 0 bildrutor | 1,8 px | – |
+| IMG_3297.mov | bara bild | 70 | 0 bildrutor | 2,4 px | – |
 | IMG_8435.mov | ljud + bild | 35 | 0 bildrutor | 2,4 px | 2,4 s |
 | IMG_8435.mov | bara bild | 35 | 0 bildrutor | 3,8–3,9 px | 19 s |
 
-**IMG_3297 klarar inte fas 2.** Detekteringen hittar ingen boll som försvinner, varken vid ljudtoppen eller i den rena bildsökningen. Den troliga orsaken är bollens storlek: ca 10,6 px i 4K blir ca 2,6 px i analysbilden (960 px på längsta sidan), och den minsta diameter som söks är 3 px (`dMin` i `src/detect/blobs.ts`). Det är inte rättat här. Det hör till fas 2 och ska mätas för sig. Felet i bollen för IMG_8435 (2,4–3,9 px) beror till en del på att facit i träffbilden är kopierat från bilden före, medan kameran kryper ca 0,6 px per bild.
+**IMG_3297 rättat i fas 3, steg 0.** Bollen är liten (ca 2,6 px i analysbilden) men hittades redan av `findVanished`. Felet låg i bekräftelsen: i träffbilden (70) ligger klubban mot bollen och skymmer en del av den, så ljuset mitt på bollen ligger mellan "kvar" och "borta", och halveringen underkände kandidaten. Nu godtas en enda halvljus bild om bilden före är helt ljus eller bilden efter helt mörk. För att den regeln inte ska släppa igenom sådant som bara passerar förbi (i IMG_3297 en hand eller ett skaft vid bild 160) krävs också att platsen efteråt har samma ljus som omgivningen, inte blir tydligt mörkare. Bildsökningen prövar nu de åtta bästa kandidaterna i stället för fyra. Övriga klipp är oförändrade (samma träffbild och bollfel). Tiderna i Chromium för IMG_3297 är inte mätta om.
 
 Kravet i roadmappen är ±2 bildrutor och 10 px. Tiderna är från Chromium utan grafikkort (mjukvaruavkodning av 4K) och säger inget säkert om en iPhone.
 

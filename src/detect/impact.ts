@@ -74,13 +74,24 @@ export async function detectImpact(source: FrameSource, audio: AudioTrack | null
     const bright = await core(from), dark = await core(to);
     const range = bright - dark;
     if (range < Math.max(10, 0.1 * bright)) return null;
+    // När bollen är borta syns marken bakom den, med samma ljus som runt bollen. Blir platsen i stället
+    // tydligt mörkare än omgivningen är det något mörkt (en hand, ett skaft) som passerar framför.
+    if (Math.abs(dark - fit.background) > 0.2 * range) return null;
     // Halvera intervallet mellan "bollen ligger kvar" och "bollen är borta".
     let lo = from, hi = to, vLo = bright, vHi = dark;
     while (hi - lo > 1) {
       const mid = (lo + hi) >> 1, v = await core(mid);
       if (v > dark + 0.5 * range) { lo = mid; vLo = v; } else { hi = mid; vHi = v; }
     }
-    if (vLo < dark + 0.7 * range || vHi > dark + 0.3 * range) return null;
+    // En enda halvljus bild godtas: klubban ligger mot bollen och skymmer en del av den, men bollen
+    // ligger kvar. Den bilden är då träffbilden. Bilderna på var sin sida måste vara helt ljus och
+    // helt mörk, annars är det något som bleknar långsamt.
+    const full = dark + 0.7 * range, gone = dark + 0.3 * range;
+    if (vHi > gone) {
+      if (vLo < full || hi + 1 > to || (await core(hi + 1)) > gone) return null;
+      return { frame: hi, ballPx, diameter: fit.diameter };
+    }
+    if (vLo < full && (lo - 1 < from || (await core(lo - 1)) < full)) return null;
     return { frame: lo, ballPx, diameter: fit.diameter };
   };
 
@@ -112,7 +123,7 @@ export async function detectImpact(source: FrameSource, audio: AudioTrack | null
       if (cand && cand.score >= MIN_SCORE) found.push({ cand, lo, hi });
     }
     found.sort((p, q) => q.cand.score - p.cand.score);
-    for (const f of found.slice(0, 4)) {
+    for (const f of found.slice(0, 8)) {
       progress(0.8, 'Letar upp rätt bildruta…');
       const ok = await confirm(f.cand, f.lo, f.hi);
       if (ok) { hit = { ...ok, peak: null, score: f.cand.score }; break; }
