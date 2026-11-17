@@ -8,12 +8,43 @@ All bearbetning sker i webbläsaren och videon laddas aldrig upp någonstans.
 
 1. Välj en video. Bildfrekvensen läses av automatiskt (du kan välja den själv om det behövs).
 2. Tryck på **Hitta träffen automatiskt**. Appen lyssnar efter klickljudet, hittar bollen i bilden och ställer sig på träffbilden. Blir det fel: stega fram till träffögonblicket, tryck på **Markera träff här** och peka på bollen.
-3. Spola till landningen, tryck på **Markera landning här** och peka ut var bollen landar. Du kan också skriva in tiden i luften för hand.
+3. Tryck på **Hitta bollbanan automatiskt**. Appen följer bollen och fyller i topp, landning och tid i luften. Landningen syns sällan i videon och är då uppskattad. Vill du hellre göra det själv: spola till landningen, tryck på **Markera landning här** och peka ut var bollen landar. Du kan också skriva in tiden i luften för hand.
 4. Toppen placeras automatiskt. Du kan peka ut den själv eller dra i punkterna.
 5. Välj färg, tjocklek och glöd.
 6. Tryck på **Exportera video**. Du får en mp4 i Safari och en webm eller mp4 i Chrome.
 
 Stegknapparna (‹ ›) och piltangenterna flyttar exakt en bildruta. Skift + pil flyttar tio. ↶ och ↷ ångrar och gör om.
+
+## Testa på mobilen
+
+Appen körs på datorn och du öppnar den i Safari på iPhone. Videon skickas bara mellan telefonen och sidan i telefonens webbläsare, den laddas inte upp till datorn eller någon annanstans.
+
+**En gång på datorn**
+1. Installera Node.js 22 (LTS) från nodejs.org om du inte har det. Kontrollera med `node -v` (20.19 eller senare, eller 22.12 eller senare).
+2. Hämta koden och rätt gren:
+   ```sh
+   git clone https://github.com/karlschelin/tracer.git
+   cd tracer
+   git checkout claude/wonderful-volta-fq4of4
+   npm install
+   ```
+   Har du redan en kopia: `git fetch && git checkout claude/wonderful-volta-fq4of4 && git pull && npm install`.
+
+**Varje gång**
+1. Kör `npm run mobil` på datorn. Den skriver ut två adresser. Använd den som börjar med **Network**, till exempel `http://192.168.1.23:5173/`.
+2. Se till att telefonen är på samma wifi som datorn. Öppna adressen i Safari på telefonen.
+3. Frågar datorn (Mac) om `node` får ta emot inkommande anslutningar: välj Tillåt.
+4. Låt datorn vara vaken medan du testar. `Ctrl+C` i terminalen stoppar servern.
+
+**Det här kan du prova**
+- **Automatiskt:** tryck på *Välj video*, välj ett klipp i Bilder, tryck på *Hitta träffen automatiskt* och sedan *Hitta bollbanan automatiskt*. Justera topp och landning genom att dra i punkterna, och exportera.
+- **För hand:** stega till bilden där klubban träffar bollen (‹ ›), tryck på *Markera träff här* och peka på bollen. Videon scrollas upp av sig själv när appen väntar på att du ska peka. Gör sedan likadant med *Markera landning här* och *Placera topp*.
+- ↶ ångrar, så du kan växla mellan automatiskt och för hand på samma klipp.
+
+**Om något inte fungerar**
+- Sidan laddar inte på telefonen: kontrollera att båda är på samma nät. Gästnät och vissa jobbnät låter inte enheter nå varandra. Prova då telefonens personliga hotspot med datorn ansluten till den.
+- Analysen tar tid: i testerna på en dator utan grafikkort tar bollbanan 50–80 s för ett 4K-klipp. Hur lång tid det tar på en iPhone är inte mätt än. Kortare klipp (trimma i Bilder till ca 3–6 s) går fortare.
+- Hittar appen inte träffen eller bollbanan visar den ett meddelande, och du kan markera för hand.
 
 ## Annotera (ta fram facit)
 
@@ -32,6 +63,8 @@ Formatet beskrivs i `samples/README.md`.
 ```sh
 npm install
 npm run dev        # http://localhost:5173, med testklippen från samples/ i en lista
+npm run mobil      # samma, men nåbar från telefonen på samma wifi (se Testa på mobilen)
+npm run measure:track  # bollspårningen mot facit, medelfel per klipp
 npm test           # enhetstester (Vitest)
 npm run e2e        # Playwright mot klippen i samples/
 npm run build      # dist/index.html (en enda fil) och dist/artifact.html

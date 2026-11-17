@@ -68,6 +68,17 @@ export function setupStage(app: App, frameListeners: Array<(frame: number) => vo
   }
   store.subscribe(setHint);
 
+  // När appen väntar på att användaren ska peka i videon ska videon synas. På mobilen ligger stegen
+  // under videon, så efter ett tryck på t.ex. "Markera träff här" är videon annars utanför skärmen.
+  let lastMode: AppState['mode'] = null;
+  store.subscribe((s) => {
+    if (s.mode && s.mode !== lastMode) {
+      const r = stage.getBoundingClientRect();
+      if (r.top < 0 || r.bottom > window.innerHeight) stage.scrollIntoView({ block: 'nearest', behavior: 'smooth' });
+    }
+    lastMode = s.mode;
+  });
+
   // ---------- Pekare ----------
   const norm = (clientX: number, clientY: number): Point => {
     const r = overlay.getBoundingClientRect();
