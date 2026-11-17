@@ -24,6 +24,7 @@ Varje fas ska vara klar och testad innan nästa börjar. "Klart när" är accept
 - Koppla ihop kandidaterna till en bana med Kalmanfilter eller RANSAC-passning mot banmodellen (fysikbegränsad: bollen kan inte vända).
 - Bollen tappas ofta mot himlen. Extrapolera med den passade modellen och skatta landningen.
 - **Klart när:** medelfelet mot facit är under ca 1,5 % av bildhöjden på samples och linjen ser rätt ut för ögat.
+- **Läge:** en avgränsad version finns (knappen "Hitta bollbanan automatiskt" i steg 3). Medelfelet är 0,25–1,28 % på de fyra klippen, se `samples/README.md`. Kvar: granskat facit, att linjen bedöms för ögat, fler och svårare klipp, och nedstigningen, som nästan alltid är extrapolerad.
 
 ## Fas 4 – Hela flödet automatiskt
 - Välj video, appen analyserar och visar resultatet, användaren godkänner eller justerar och exporterar.

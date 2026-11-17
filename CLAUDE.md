@@ -12,10 +12,10 @@ Primär användare: en golfare som filmar sina slag med iPhone på stativ, bakom
 - **Mät i stället för att gissa.** Ändringar i detektering och banpassning ska verifieras mot klippen i `samples/` med siffror (se Test).
 
 ## Nuvarande läge
-- Fas 1 och 2 i `docs/ROADMAP.md` är genomförda. Fas 1: Vite + TypeScript, bildexakt stegning, automatisk fps, annoteringsläge, facit-utkast och e2e-tester. Fas 2: automatisk träff och boll vid uppställning (`src/detect/`), knappen "Hitta träffen automatiskt" i steg 2. Bollspårning (fas 3) finns inte än.
+- Fas 1 och 2 i `docs/ROADMAP.md` är genomförda. Fas 1: Vite + TypeScript, bildexakt stegning, automatisk fps, annoteringsläge, facit-utkast och e2e-tester. Fas 2: automatisk träff och boll vid uppställning (`src/detect/`), knappen "Hitta träffen automatiskt" i steg 2. Fas 3 finns i en avgränsad version: knappen "Hitta bollbanan automatiskt" i steg 3 (`trackBall` i `src/detect/track.ts`, kandidater i `candidates.ts`, passning i `src/trajectory/fit.ts`). Mät med `npm run measure:track`. Resultat, beslut och begränsningar står i `samples/README.md`.
 - Facit i `samples/` är fortfarande utkast från bildanalys (status `utkast`), inte granskade av en människa.
 - Träffdetekteringen (`detectImpact` i `src/detect/impact.ts`): ljudtoppar ger kandidater, bilden bekräftar genom att hitta en ljus, rund, isolerad fläck som ligger still före och är borta efter, och en halvering ger exakt bildruta. Utan användbart ljud söks klippet igenom i bilden var 0,2 s. Trösklarna är andelar av bildens ljusomfång, inte absoluta nivåer.
-- Banmodellen ligger i `pos()` i `src/trajectory/model.ts`. Höjden lättar av mot toppen och accelererar ner mot landningen. Sidled är ett andragradspolynom genom start, topp och landning. Alla punkter är normaliserade till 0..1.
+- Banmodellen ligger i `pos()` i `src/trajectory/model.ts`. Höjden lättar av mot toppen och accelererar ner mot landningen. Sidled är ett andragradspolynom genom start, topp och landning. Valfri parameter `perspective` (0 = som förut) gör att bollen går allt långsammare i bilden när den flyger bort. Alla punkter är normaliserade till 0..1.
 - Exporten ritar video och linje på en canvas och spelar in med `MediaRecorder` (mp4 i Safari, webm eller mp4 i Chrome).
 - `npm run build` ger `dist/index.html` (en enda fil) och `dist/artifact.html`. Artifact-kopian får inte ha doctype, html-, head- eller body-taggar, och den sparar filer via `claude.use('downloads')` (`src/export/save.ts`).
 
@@ -25,8 +25,8 @@ Vite + TypeScript, ES-moduler:
 src/
   app/        tillstånd (en store med ångra/gör om), delat sammanhang
   video/      bildklocka: fps-avläsning och stegning på bildindex (requestVideoFrameCallback); bildrutor till analysen
-  trajectory/ banmodell, senare passning av modell till detekterade punkter
-  detect/     träffdetektering (ljud + bild) och boll vid uppställning; Web Worker för tung analys; (fas 3) spårning
+  trajectory/ banmodell och passning av modellen till detekterade punkter (Nelder–Mead, Huber)
+  detect/     träffdetektering (ljud + bild), boll vid uppställning och bollspårning; Web Worker för tung analys
   render/     ritning av tracer, hjälplinjer, facit-punkter och lupp (rena funktioner: ctx, tid, bana, stil)
   export/     inspelning (MediaRecorder, senare WebCodecs) och sparande av filer
   annotate/   facit-formatet (rena funktioner) samt läsning och sparande

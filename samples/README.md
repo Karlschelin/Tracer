@@ -98,3 +98,38 @@ Det här är också provat, med samma resultat (fel 0 bildrutor, bollfel högst 
 Den andra ljudtoppen i IMG_0178 (2,37 s) sammanfaller med att bagen gungar till. Den ger en svag kandidat i bilden men underkänns, eftersom fläcken bleknar över flera bilder i stället för att försvinna från en bild till nästa.
 
 Begränsningar som mätningen inte täcker: facit är utkast som bygger på samma slags bildanalys, båda klippen är från samma plats, dag, matta och kameravinkel, och varianterna ovan är gjorda av samma två klipp. Boll på peg eller i gräs, annan bollfärg, flera bollar nära varandra, skakig kamera och 60–240 bilder per sekund är inte provade på riktiga klipp.
+
+## Automatisk bollbana (fas 3), mätt mot utkasten
+
+Mätt med `npm run measure:track` (ffmpeg, `tests/unit/samples.track.test.ts`): först den automatiska träffen med ljud, sedan spårningen från den. Felet är avståndet mellan den passade banan och facit vid varje bild där facit har en punkt, som andel av bildhöjden (3840 px). "I spåret" är bilder där spårningen själv hittade bollen, "extrapolerat" är bilder där banan bara bygger på modellen.
+
+| Klipp | Medelfel | Störst | I spåret | Extrapolerat | Spårpunkter | Säkerhet | Flygtid |
+|---|---|---|---|---|---|---|---|
+| IMG_0178.mov | **1,28 %** (49 px) | 7,1 % | 0,48 % (92 bilder) | 3,5 % (33) | 92 | 0,60 | 6,6 s |
+| IMG_0180.mov | **1,01 %** (39 px) | 4,0 % | 0,53 % (53) | 2,3 % (20) | 53 | 0,56 | 4,0 s |
+| IMG_3297.mov | **0,25 %** (9 px) | 0,8 % | 0,18 % (42) | 0,39 % (19) | 42 | 0,85 | 6,1 s |
+| IMG_8435.mov | **0,74 %** (28 px) | 2,0 % | 0,29 % (44) | 1,2 % (46) | 44 | 0,76 | 5,3 s |
+
+Alla fyra ligger under målet på 3 % och under roadmappens 1,5 %. Samma mätning i Chromium (`tests/e2e/track.spec.ts`) gav 0,24–1,50 % (se nedan). Avkodningen i webbläsaren skiljer sig något från ffmpeg, så spårpunkterna blir inte exakt desamma.
+
+### Hur det fungerar
+
+1. **Kandidater** (`src/detect/candidates.ts`): varje bild efter träffen i 960 px (längsta sidan), gråskala. Trebildsskillnad mot bilden 1 och 3 bildrutor före och efter: det som skiljer sig från båda grannarna åt samma håll. Både ljusa fläckar (bollen mot mark och träd) och mörka (bollen mot ljus himmel) tas med. Före jämförelsen flyttas grannbilderna så att de ligger rätt mot mittbilden: förskjutningen mäts med summan av absoluta skillnader inom ±2 px och förfinas till delar av en pixel. Det tar hand om att kameran kryper. Stora fläckar (spelaren, klubban) sorteras bort på ytan. Tröskeln följer bildens brusnivå.
+2. **Spår** (`src/detect/track.ts`): hypoteser startas från par av kandidater 1–3 bilder efter träffen som ligger i linje med bollens viloplats och rör sig uppåt. Varje hypotes förlängs bild för bild med en förutsägelse (krympande steg direkt efter träffen, sedan andragradspolynom genom de senaste punkterna) och en lucka som växer när bollen saknas. De fyra längsta hypoteserna passas mot banmodellen, och den med flest punkter nära sin passade bana vinner (RANSAC-tanken). Det sorterar bort torvbitarna i IMG_8435 och klubban i genomsvingen i IMG_3297, som annars kan ge längre spår än bollen.
+3. **Passning** (`src/trajectory/fit.ts`): banmodellen `pos()` med en ny parameter, perspektiv (`warp()` i `model.ts`): bollen flyger bort från kameran och går därför allt långsammare i bilden. Utan perspektiv (0) är modellen exakt som förut. Start ligger fast i den automatiska träffens boll. Topp, landning, flygtid, när toppen nås, perspektiv och träfftiden inom träffbilden passas med Nelder–Mead och Huber-förlust (avvikande punkter väger mindre). Det som inte syns hålls på plats av svaga antaganden: toppen efter ca 40 % av flygtiden, flygtid kring 5 s (1,2–9 s), landning strax under en horisont nära mitten av bilden och nära toppen i sidled.
+4. **Extrapolering**: den passade banan plockar upp punkter som spåret missade och fortsätter efter att bollen tappats. Landningen och flygtiden är skattade, inte uppmätta, eftersom landningen inte syns i något klipp.
+
+### Beslut och skäl
+
+- **Analysupplösning 960 px**, samma som träffdetekteringen. Bollen i luften är 1–4 px där. Högre upplösning kostar 2–4 gånger så mycket tid per bild.
+- **Bildavstånd 1 och 3.** Att lägga till 6 gav inga fler träffar på bollen, bara längre tid: nära toppen i IMG_8435 är bollen ca 1 px och −10 gråvärden, och den hamnar bland 1000–2000 brusfläckar oavsett avstånd.
+- **Toppen vid 40 % av flygtiden** i antagandet, inte 50 %. Modellen passad mot hela facit ger 35–50 %, och 40 % gav minst fel både normalt och när en av de första bilderna efter träffen saknar kandidat (största fel 2,1 % i det provet, mot 3,5 % med 50 %). Värdet är alltså valt på samma fyra klipp som det mäts på.
+- **Säkerheten** (0..1) väger antal punkter (20 räcker), hur länge bollen följts (0,8 s räcker) och hur nära punkterna ligger banan. Under 0,25 fylls inget i och appen ber användaren markera själv. Mellan 0,25 och 0,5 fylls banan i med en varning. Alla fyra klipp ligger på 0,55–0,85.
+- Knappen fungerar också efter en **manuell träff**: då antas den markerade bilden vara den sista där bollen ligger kvar.
+
+### Begränsningar
+
+- **Nedstigningen syns nästan aldrig.** Spåret tappar bollen strax efter toppen i tre av fyra klipp (mot moln eller för liten), och resten av banan är modellen. Det största felet ligger där: upp till 7 % i IMG_0178 i slutet av facit. Landningen och flygtiden är skattningar, och den skattade flygtiden avgör hur länge linjen ritas.
+- **Fyra klipp, samma slags slag.** Alla är filmade bakom spelaren, med fullsving och bollen som går rakt upp i bilden. Låga slag, chippar, starkt skruvade slag och kamera från sidan är inte provade. Antagandena (horisont, toppens läge) är valda för det här.
+- **Facit är utkast** framtaget med liknande bildanalys, så felet är mätt mot något som kan ha samma systematiska fel.
+- **Tid.** I Chromium utan grafikkort tar spårningen 50–80 s per klipp, nästan helt avkodning och sökning i 4K-videon (en sökning per bild). I ffmpeg 9–18 s. Tiden på en iPhone är inte mätt.
